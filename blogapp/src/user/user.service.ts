@@ -22,6 +22,7 @@ export class UserService {
         }
         const payload:Jwtpayload={username:UserInput.username,id:user.id};
         const token=await this.jwtService.sign(payload);
-        return{token,user}
+        
+        return { token, user};
 }
 }
