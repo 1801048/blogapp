@@ -1,18 +1,20 @@
 /* eslint-disable prettier/prettier */
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { UserEntity } from "src/user/user.entity";
 import {BlogRepository} from "./blog.repository"
 import { BlogInputType } from "./types/blog.input";
+import { CreateBlogInputType } from "./types/createorupdate.blog";
 
 @Injectable()
 export class BlogService {
     constructor(@InjectRepository(BlogRepository) private blogRepository:BlogRepository){}
 
-    async createblog(input:BlogInputType){
-        return this.blogRepository.createBlog(input)
+    async createblog(user:UserEntity,input:CreateBlogInputType){
+        return this.blogRepository.createOrupdateBlog(user,input)
     }
-    async updateblog(id:number ,input:BlogInputType){
-        return this.blogRepository.updateBlog(id,input)
+    async updateblog( user:UserEntity,input:CreateBlogInputType){
+        return this.blogRepository.createOrupdateBlog(user,input)
     }
     async getblog(id:number){
         return this.blogRepository.getBlogbyId(id)

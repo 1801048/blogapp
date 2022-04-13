@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
-import { type } from "os";
+
 import { UserEntity } from "src/user/user.entity";
-import { BaseEntity, Column, Entity, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('Blog')
 export class BlogEntity extends BaseEntity{
@@ -17,9 +17,11 @@ export class BlogEntity extends BaseEntity{
     @Column()
     tags:string
 
-    // @Column()
-    // userId:number
+    @ManyToOne(type=>UserEntity,user=>user.blogs,{eager:false})
+    user:UserEntity
 
-    // @ManyToOne(type=>UserEntity,user=>user.blogs,{eager:false})
-    // user:UserEntity
+    @Column()
+    userId:number
+
+     
 }

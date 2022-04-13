@@ -8,19 +8,16 @@ import { Field } from "@nestjs/graphql";
 @Unique(['username'])
 export class UserEntity extends BaseEntity{
     @PrimaryGeneratedColumn()
-    @Field()
     id:number
 
     @Column()
-    @Field()
     username:string
 
     @Column()
-    @Field()
     password:string
 
-    // @OneToMany(type=>BlogEntity,blog=>blog.user,{eager:true})
-    // blogs:BlogEntity[];
+    @OneToMany(type=>BlogEntity,blog=>blog.user,{eager:true})
+    blogs:BlogEntity[];
 
     validatePassword(password:string){
         const encrypted=`${crypto.MD5(password)}`

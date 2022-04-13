@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import {  UseGuards } from "@nestjs/common";
+import {  UseGuards, UsePipes, ValidationPipe } from "@nestjs/common";
 import { Query,Args, Mutation, Resolver } from "@nestjs/graphql";
 import { SingleFieldSubscriptionsRule } from "graphql";
 import { GetUser } from "./get.user.decorator";
@@ -15,10 +15,12 @@ export class UserResolver{
     constructor(private userService:UserService){}
 
         @Mutation((returns) =>UserType)
+        @UsePipes(ValidationPipe)
         signup(@Args('input') input:UserInput){
             return this.userService.signup(input);
         }
         @Mutation((returns) =>SigninResponse)
+        @UsePipes(ValidationPipe)
         signin(@Args('input') input:UserInput){
             return this.userService.signin(input);
         }
