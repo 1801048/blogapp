@@ -1,4 +1,4 @@
-/* eslint-disable prettier/prettier */
+
 import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn, Unique } from "typeorm";
 import * as crypto from "crypto-js";
 import { BlogEntity } from "src/blog/blog.entity";

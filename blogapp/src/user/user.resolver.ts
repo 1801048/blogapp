@@ -1,4 +1,4 @@
-/* eslint-disable prettier/prettier */
+
 import {  UseGuards, UsePipes, ValidationPipe } from "@nestjs/common";
 import { Query,Args, Mutation, Resolver } from "@nestjs/graphql";
 import { SingleFieldSubscriptionsRule } from "graphql";

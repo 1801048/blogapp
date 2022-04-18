@@ -1,4 +1,4 @@
-/* eslint-disable prettier/prettier */
+
 import { Field, ID, ObjectType } from "@nestjs/graphql";
 
 @ObjectType('User')

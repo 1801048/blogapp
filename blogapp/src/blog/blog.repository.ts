@@ -1,4 +1,4 @@
-/* eslint-disable prettier/prettier */
+
 import { BadRequestException, NotFoundException } from "@nestjs/common";
 import { UserEntity } from "src/user/user.entity";
 import { EntityRepository, Repository } from "typeorm";
@@ -21,33 +21,40 @@ export class BlogRepository extends Repository<BlogEntity>
         blog.tags=input.tags
 
          blog.user=user
-        // blog.userId=user.id
+        
         
 
-        await blog.save()
+       const result= await blog.save()
+        
 
-        delete blog.user
+       
 
-        return blog;
+
+        return result;
         }
          catch{
-            return new BadRequestException();
+            throw new BadRequestException();
         }
     }
     async  getBlogbyId(id:number){
-    
-        const blog=await this.findOne(id);
+          try{
+          const query=this.createQueryBuilder('blogs')
+          query.andWhere('blogs.id=:id',{id:id})
+          const blog=query.getOneOrFail()
+          if(blog){
+              return blog
+          }
+          }
+          catch{
+              throw new NotFoundException()
+          }
+        //const blog=await this.findOne(id);
 
-        if(!blog){
-
-            throw new NotFoundException(`task not found`)
-
-        }
-
-        return blog;
+       
     
 
     }
+    
 
     async updateBlog(user:UserEntity,id:number,input:BlogInputType){
         
@@ -61,8 +68,8 @@ export class BlogRepository extends Repository<BlogEntity>
 
         blog.tags=input.tags
 
-        await blog.save()
-        return blog
+       const result= await blog.save()
+        return result
         
         
     }
@@ -73,13 +80,13 @@ export class BlogRepository extends Repository<BlogEntity>
             return this.createBlog(user,input)
         }
         try{
-            const targetblog=await this.findOneOrFail(id)
+            const targetblog=await this.getBlogbyId(id)
             if(targetblog){
                 return this.updateBlog(user,id,input)
             }
         }
         catch{
-            return new BadRequestException();
+            throw new BadRequestException();
         }
     }
 }
