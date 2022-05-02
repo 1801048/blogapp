@@ -9,6 +9,15 @@ export class UserInput {
     @Field()
     username:string
 
+
+    @Field({nullable:true})
+    firstname:string
+  
+    @Field({nullable:true})
+    lastname:string  
+
+
+
     @MinLength(8)
     @IsNotEmpty()
     //@Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {message: 'password too weak'})

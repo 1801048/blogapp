@@ -1,12 +1,14 @@
 
 
+import { ObjectType } from "@nestjs/graphql";
 import { UserEntity } from "src/user/user.entity";
 import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('Blog')
+@ObjectType()
 export class BlogEntity extends BaseEntity{
-    @PrimaryGeneratedColumn()
-    id:number
+    @PrimaryGeneratedColumn('uuid')
+    id:string
 
     @Column()
     title:string
@@ -17,11 +19,11 @@ export class BlogEntity extends BaseEntity{
     @Column()
     tags:string
 
-    @ManyToOne(type=>UserEntity,user=>user.blogs,{eager:false})
-    user:UserEntity
+    @ManyToOne(type => UserEntity, user => user.blogs)
+    user: UserEntity;
 
     @Column()
-    userId:number
+    userId:string
 
      
 }

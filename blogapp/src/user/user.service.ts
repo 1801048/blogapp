@@ -5,6 +5,8 @@ import { Jwtpayload } from "./jwt.payload";
 import { UserInput } from "./types/user.input";
 import { UserRepository } from "./user.repository";
 import {JwtService} from '@nestjs/jwt';
+import { UserEntity } from "./user.entity";
+import { UserProfileInput } from "./types/profile.input";
 
 @Injectable()
 export class UserService {
@@ -25,4 +27,10 @@ export class UserService {
         
         return { token, user};
 }
+    async getuserprofile(userEmail:string){
+        return this.userRepository.getuserprofile(userEmail)
+    }
+    async updateProfile(user: UserEntity, input: UserProfileInput) {
+        return this.userRepository.updateProfile(user, input);
+    }
 }

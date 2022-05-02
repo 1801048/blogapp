@@ -3,7 +3,7 @@ import { Field, InputType } from "@nestjs/graphql";
 @InputType()
 export class CreateBlogInputType{
     @Field({nullable:true})
-    id:number
+    id:String
     @Field()
     title:string;
     @Field()

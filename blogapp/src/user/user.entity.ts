@@ -7,17 +7,24 @@ import { Field } from "@nestjs/graphql";
 @Entity('User')
 @Unique(['username'])
 export class UserEntity extends BaseEntity{
-    @PrimaryGeneratedColumn()
-    id:number
+    @PrimaryGeneratedColumn('uuid')
+    id:string
+
 
     @Column()
     username:string
 
     @Column()
+    firstname:string
+
+    @Column()
+    lastname:string
+
+    @Column()
     password:string
 
-    @OneToMany(type=>BlogEntity,blog=>blog.user,{eager:true})
-    blogs:BlogEntity[];
+    @OneToMany(type => BlogEntity, blog => blog.user, { eager: true, onDelete: 'SET NULL' })
+    blogs: BlogEntity[];
 
     validatePassword(password:string){
         const encrypted=`${crypto.MD5(password)}`

@@ -3,6 +3,7 @@ import { BadRequestException, NotFoundException } from "@nestjs/common";
 import { UserEntity } from "src/user/user.entity";
 import { EntityRepository, Repository } from "typeorm";
 import { BlogEntity } from "./blog.entity";
+import { BlogFilter } from "./types/blog.filter";
 import { BlogInputType } from "./types/blog.input";
 import { CreateBlogInputType } from "./types/createorupdate.blog";
 
@@ -11,7 +12,7 @@ export class BlogRepository extends Repository<BlogEntity>
 {
     async createBlog(user:UserEntity,input:BlogInputType){
 
-        try{
+        
         const blog=new BlogEntity()
 
         blog.title=input.title
@@ -20,23 +21,16 @@ export class BlogRepository extends Repository<BlogEntity>
 
         blog.tags=input.tags
 
-         blog.user=user
         
-        
-
-       const result= await blog.save()
+        blog.user=user
+        blog.userId=user.id
         
 
-       
-
-
+        const result=await this.save(blog);
         return result;
-        }
-         catch{
-            throw new BadRequestException();
-        }
+        
     }
-    async  getBlogbyId(id:number){
+    async  getBlogbyId(id:String){
           try{
           const query=this.createQueryBuilder('blogs')
           query.andWhere('blogs.id=:id',{id:id})
@@ -56,10 +50,10 @@ export class BlogRepository extends Repository<BlogEntity>
     }
     
 
-    async updateBlog(user:UserEntity,id:number,input:BlogInputType){
+    async updateBlog(user:UserEntity,id:String,input:BlogInputType){
         
         const blog=await this.getBlogbyId(id)
-
+ 
         //console.log(blog)
 
         blog.title=input.title
@@ -76,7 +70,7 @@ export class BlogRepository extends Repository<BlogEntity>
 
     async createOrupdateBlog(user:UserEntity,input:CreateBlogInputType){
         const {id,title,description,tags}=input
-        if(id===undefined || id===null){
+        if(id===undefined || id===null ){
             return this.createBlog(user,input)
         }
         try{
@@ -89,4 +83,39 @@ export class BlogRepository extends Repository<BlogEntity>
             throw new BadRequestException();
         }
     }
+    async allMyBlogs() {
+
+        try {
+            const query=this.createQueryBuilder('blogs')
+            const result= await query.getMany()
+            return result
+
+        }
+        catch{
+            throw new NotFoundException();
+        }
+    
+      }
+      async allBlogs(input: BlogFilter) {
+        const allBlog = await this.find();
+        const query = this.createQueryBuilder('blog');
+        if (input.tags == null && input.title == null) {
+          return allBlog;
+        }
+        if (input.title === '') {
+          return allBlog;
+        }
+        if (input.tags) {
+          query.andWhere(`tags= :tags`, { tags: input.tags });
+          const blog = query.getMany();
+          return await blog;
+        }
+        if (input.title) {
+          query.andWhere(`title= :title`, { title: input.title });
+          const blog = query.getMany();
+    
+          return await blog;
+        }
+        return allBlog;
+      }
 }

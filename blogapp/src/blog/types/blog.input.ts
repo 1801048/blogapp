@@ -2,10 +2,10 @@
 import { Field, InputType } from "@nestjs/graphql";
 @InputType()
 export class BlogInputType{
-    @Field()
+    @Field({nullable:true})
     title:string;
-    @Field()
+    @Field({nullable:true})
     description:string;
-    @Field()
+    @Field({nullable:true})
     tags:string;
 }

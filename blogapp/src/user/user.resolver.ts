@@ -5,6 +5,7 @@ import { SingleFieldSubscriptionsRule } from "graphql";
 import { GetUser } from "./get.user.decorator";
 import { GQLAuthQuard } from "./gql.authguard";
 import { SigninResponse } from "./signin.response";
+import { UserProfileInput } from "./types/profile.input";
 import { UserInput } from "./types/user.input";
 import { UserEntity } from "./user.entity";
 import { UserService } from "./user.service";
@@ -27,8 +28,15 @@ export class UserResolver{
 
         @Query(returns =>UserType)
         @UseGuards(GQLAuthQuard)
-        profile(@GetUser() user:UserEntity){
-            return user
+        profile(@Args('userEmail') userEmail:string){
+            return this.userService.getuserprofile(userEmail)
         }
-    
+        @Mutation((returns) => UserType)
+        @UseGuards(GQLAuthQuard)
+        updateProfile(
+          @GetUser() user: UserEntity,
+          @Args('input') input: UserProfileInput,
+        ) {
+          return this.userService.updateProfile(user, input);
+        }
 }

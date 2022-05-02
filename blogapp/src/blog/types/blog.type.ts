@@ -4,7 +4,7 @@ import { ObjectType, Field, ID } from "@nestjs/graphql"
 @ObjectType('Blog')
 export class BlogType{
     @Field((type)=>ID)
-    id:number
+    id:String
 
     @Field()
     title:string
